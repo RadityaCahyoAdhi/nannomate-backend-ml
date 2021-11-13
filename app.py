@@ -1,7 +1,6 @@
 # import library
 from flask import Flask, request
 from flask_restful import Resource, Api
-# from flask_cors import CORS
 
 # Inisiasi object flask
 app = Flask(__name__)
@@ -11,16 +10,6 @@ api = Api(app)
 
 # inisiasi variabel kosong bertipe dictionary
 fitur = {} # variable global , dictionary = json
-
-import pandas as pd
-# from sklearn.datasets import load_iris
-from sklearn.tree import DecisionTreeClassifier
- 
-# Membaca file iris.csv
-iris = pd.read_csv('Iris.csv')
-
-# menghilangkan kolom yang tidak penting
-iris.drop('Id',axis=1,inplace=True)
 
 # memisahkan atribut dan label
 X = iris[['SepalLengthCm', 'SepalWidthCm', 'PetalLengthCm', 'PetalWidthCm' ]]
