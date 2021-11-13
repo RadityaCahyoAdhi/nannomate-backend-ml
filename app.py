@@ -29,7 +29,7 @@ class MachineLearningResource(Resource):
         fitur["ujung_lengan"] = request.form["ujung_lengan"]
 
         # prediksi model dengan tree_model.predict([[SepalLength, SepalWidth, PetalLength, PetalWidth]])
-        prediction = random_forest_model.predict([[fitur["jumlah_lengan"], fitur["bercabang"], fitur["knob"], fitur["bentuk_lengan"], fitur["ujung_lengan"]]])
+        prediction = random_forest_model.predict([[6,1,1,1,1]])[0]
         response = {"prediction" : prediction}
         return response
 
