@@ -13,7 +13,7 @@ api = Api(app)
 lbl_encoder = load_model("model/lbl_encoder_nannomate.pkl")
 
 # load machine learning model 
-random_forest_model =load_model("model/random_forest_nannomate.pkl")
+random_forest_model = load_model("model/random_forest_nannomate.pkl")
 
 # inisiasi variabel kosong bertipe dictionary
 fitur = {} # variable global , dictionary = json
@@ -22,15 +22,15 @@ fitur = {} # variable global , dictionary = json
 class MachineLearningResource(Resource):
     # metode post
     def post(self):
-        fitur["jumlah_lengan"] = request.form["jumlah_lengan"]
-        fitur["bercabang"] = request.form["bercabang"]
-        fitur["knob"] = request.form["knob"]
-        fitur["bentuk_lengan"] = request.form["bentuk_lengan"]
-        fitur["ujung_lengan"] = request.form["ujung_lengan"]
+        # fitur["jumlah_lengan"] = request.form["jumlah_lengan"]
+        # fitur["bercabang"] = request.form["bercabang"]
+        # fitur["knob"] = request.form["knob"]
+        # fitur["bentuk_lengan"] = request.form["bentuk_lengan"]
+        # fitur["ujung_lengan"] = request.form["ujung_lengan"]
 
-        # prediksi model dengan tree_model.predict([[SepalLength, SepalWidth, PetalLength, PetalWidth]])
-        prediction = random_forest_model.predict([[fitur["jumlah_lengan"], fitur["bercabang"], fitur["knob"], fitur["bentuk_lengan"], fitur["ujung_lengan"]]])
-        response = {"prediction" : prediction[0]}
+        # # prediksi model dengan tree_model.predict([[SepalLength, SepalWidth, PetalLength, PetalWidth]])
+        # prediction = random_forest_model.predict([[fitur["jumlah_lengan"], fitur["bercabang"], fitur["knob"], fitur["bentuk_lengan"], fitur["ujung_lengan"]]])
+        response = {"prediction" : 2}
         return response
 
 # setup resourcenya
