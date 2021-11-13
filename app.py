@@ -30,7 +30,7 @@ class MachineLearningResource(Resource):
 
         # # prediksi model dengan tree_model.predict([[SepalLength, SepalWidth, PetalLength, PetalWidth]])
         # prediction = random_forest_model.predict([[fitur["jumlah_lengan"], fitur["bercabang"], fitur["knob"], fitur["bentuk_lengan"], fitur["ujung_lengan"]]])
-        response = {"prediction" : 2}
+        response = {"prediction" : random_forest_model}
         return response
 
 # setup resourcenya
