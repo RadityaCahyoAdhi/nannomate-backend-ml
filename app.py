@@ -1,6 +1,7 @@
 # import library
 from flask import Flask, request
 from flask_restful import Resource, Api
+from jcopml.utils import load_model
 
 # Inisiasi object flask
 app = Flask(__name__)
@@ -8,40 +9,27 @@ app = Flask(__name__)
 # inisiasi object flask_restful
 api = Api(app)
 
+# load label encoder
+lbl_encoder = load_model("model/lbl_encoder_nannomate.pkl")
+
+# load machine learning model 
+random_forest_model =load_model("model/random_forest_nannomate.pkl")
+
 # inisiasi variabel kosong bertipe dictionary
 fitur = {} # variable global , dictionary = json
-
-import pandas as pd
-# from sklearn.datasets import load_iris
-from sklearn.tree import DecisionTreeClassifier
- 
-# Membaca file iris.csv
-iris = pd.read_csv('Iris.csv')
-
-# menghilangkan kolom yang tidak penting
-iris.drop('Id',axis=1,inplace=True)
-
-# memisahkan atribut dan label
-X = iris[['SepalLengthCm', 'SepalWidthCm', 'PetalLengthCm', 'PetalWidthCm' ]]
-y = iris['Species']
- 
-# membuat model Decision Tree
-tree_model = DecisionTreeClassifier() 
- 
-# melakukan pelatihan model terhadap data
-tree_model.fit(X, y)
 
 # membuat class Resource
 class MachineLearningResource(Resource):
     # metode post
     def post(self):
-        fitur["sepal_length"] = request.form["sepal_length"]
-        fitur["sepal_width"] = request.form["sepal_length"]
-        fitur["petal_length"] = request.form["petal_length"]
-        fitur["petal_width"] = request.form["petal_width"]
+        fitur["jumlah_lengan"] = request.form["jumlah_lengan"]
+        fitur["bercabang"] = request.form["bercabang"]
+        fitur["knob"] = request.form["knob"]
+        fitur["bentuk_lengan"] = request.form["bentuk_lengan"]
+        fitur["ujung_lengan"] = request.form["ujung_lengan"]
 
         # prediksi model dengan tree_model.predict([[SepalLength, SepalWidth, PetalLength, PetalWidth]])
-        prediction = tree_model.predict([[fitur["sepal_length"], fitur["sepal_width"], fitur["petal_length"], fitur["petal_width"]]])
+        prediction = random_forest_model.predict([[fitur["jumlah_lengan"], fitur["bercabang"], fitur["knob"], fitur["bentuk_lengan"], fitur["ujung_lengan"]]])
         response = {"prediction" : prediction[0]}
         return response
 
