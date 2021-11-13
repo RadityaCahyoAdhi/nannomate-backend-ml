@@ -11,6 +11,16 @@ api = Api(app)
 # inisiasi variabel kosong bertipe dictionary
 fitur = {} # variable global , dictionary = json
 
+import pandas as pd
+# from sklearn.datasets import load_iris
+from sklearn.tree import DecisionTreeClassifier
+ 
+# Membaca file iris.csv
+iris = pd.read_csv('Iris.csv')
+
+# menghilangkan kolom yang tidak penting
+iris.drop('Id',axis=1,inplace=True)
+
 # memisahkan atribut dan label
 X = iris[['SepalLengthCm', 'SepalWidthCm', 'PetalLengthCm', 'PetalWidthCm' ]]
 y = iris['Species']
@@ -37,6 +47,3 @@ class MachineLearningResource(Resource):
 
 # setup resourcenya
 api.add_resource(MachineLearningResource, "/api/predict", methods=["POST"])
-
-if __name__ == "__main__":
-    app.run(debug=True, port=5005)
