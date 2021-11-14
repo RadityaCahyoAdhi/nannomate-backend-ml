@@ -1,6 +1,6 @@
 # import library
 from flask import Flask, request
-
+from flask_restful import Resource, Api
 from jcopml.utils import load_model
 import numpy as np
 
