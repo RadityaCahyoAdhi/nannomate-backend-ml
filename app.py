@@ -30,7 +30,7 @@ class MachineLearningResource(Resource):
         fitur["ujung_lengan"] = request.form["ujung_lengan"]
 
         # prediksi probabilitas masing-masing kelas
-        probs = random_forest_model.predict_proba([[6,1,1,1,1]])
+        probs = random_forest_model.predict_proba([[fitur["jumlah_lengan"],fitur["bercabang"],fitur["knob"],fitur["bentuk_lengan"],fitur["ujung_lengan"]]])
 
         # mengurutkan probabilitas dari yang terbesar ke yang terkecil
         sorted_probs = sorted(probs[0], reverse=True)
