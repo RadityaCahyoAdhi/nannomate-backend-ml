@@ -36,7 +36,7 @@ class MachineLearningResource(Resource):
         sorted_probs = sorted(probs[0], reverse=True)
 
         # mencari 3 kelas spesies dengan probabilitas terbesar
-        best_three_species = np.argsort(probs, axis=1)[:,-3:][0]
+        best_three_species = np.argsort(probs)[:,-3:][0]
         
         # melakukan inverse transform pada 3 kelas spesies dengan probabilitas terbesar
         decoded_best_three_species = lbl_encoder.inverse_transform(best_three_species)
