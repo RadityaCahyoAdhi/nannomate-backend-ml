@@ -2,6 +2,7 @@
 from flask import Flask, request
 from flask_restful import Resource, Api
 from jcopml.utils import load_model
+from cerberus import Validator
 import numpy as np
 
 # Inisiasi object flask
@@ -23,41 +24,58 @@ fitur = {} # variable global , dictionary = json
 class MachineLearningResource(Resource):
     # metode post
     def post(self):
-        fitur["jumlah_lengan"] = request.form["jumlah_lengan"]
-        fitur["bercabang"] = request.form["bercabang"]
-        fitur["knob"] = request.form["knob"]
-        fitur["bentuk_lengan"] = request.form["bentuk_lengan"]
-        fitur["ujung_lengan"] = request.form["ujung_lengan"]
+        # mengambil data request json
+        request_data = request.get_json()
 
-        # inisialisasi validator
-        schema = {'jumlah_lengan': {'type': 'string'}}
-        # validator = Validator(schema)
-        response = request.form
-        # # prediksi probabilitas masing-masing kelas
-        # probs = random_forest_model.predict_proba([[fitur["jumlah_lengan"],fitur["bercabang"],fitur["knob"],fitur["bentuk_lengan"],fitur["ujung_lengan"]]])
+        # schema validator
+        schema = {
+                    'jumlah_lengan': {'type': 'integer', 'min': 0},
+                    'bercabang': {'type': 'integer', 'min': 0, 'max': 1},
+                    'knob': {'type': 'integer', 'min': 0, 'max': 1},
+                    'bentuk_lengan': {'type': 'integer', 'min': 0, 'max': 1},
+                    'ujung_lengan': {'type': 'integer', 'min': 0, 'max': 1}
+                    }
 
-        # # mengurutkan probabilitas dari yang terbesar ke yang terkecil
-        # sorted_probs = sorted(probs[0], reverse=True)
+        # inisialisasi validator            
+        validator = Validator(schema)
+        validator.require_all = True
 
-        # # mencari 3 kelas spesies dengan probabilitas terbesar
-        # best_three_species = np.argsort(probs)[:,-3:][0]
-        
-        # # melakukan inverse transform pada 3 kelas spesies dengan probabilitas terbesar
-        # decoded_best_three_species = lbl_encoder.inverse_transform(best_three_species)
+        # validasi request
+        if not(validator.validate(request_data)):
+            return validator.errors, 401
+        else:
+            fitur["jumlah_lengan"] = request_data["jumlah_lengan"]
+            fitur["bercabang"] = request_data["bercabang"]
+            fitur["knob"] = request_data["knob"]
+            fitur["bentuk_lengan"] = request_data["bentuk_lengan"]
+            fitur["ujung_lengan"] = request_data["ujung_lengan"]
 
-        # response = {
-        #                 "prediction": {
-        #                     "first_prediction": decoded_best_three_species[2],
-        #                     "second_prediction": decoded_best_three_species[1],
-        #                     "third_prediction": decoded_best_three_species[0]
-        #                 },
-        #                 "probabilities": {
-        #                     "first_probability": round(sorted_probs[0]*100, 2),
-        #                     "second_prediction": round(sorted_probs[1]*100, 2), 
-        #                     "third_prediction": round(sorted_probs[2]*100, 2)
-        #                 }
-        #             }
-        return response, 200
+            # prediksi probabilitas masing-masing kelas
+            probs = random_forest_model.predict_proba([[fitur["jumlah_lengan"], fitur["bercabang"], fitur["knob"], fitur["bentuk_lengan"], fitur["ujung_lengan"]]])
+
+            # mengurutkan probabilitas dari yang terbesar ke yang terkecil
+            sorted_probs = sorted(probs[0], reverse=True)
+
+            # mencari 3 kelas spesies dengan probabilitas terbesar
+            best_three_species = np.argsort(probs)[:,-3:][0]
+            
+            # melakukan inverse transform pada 3 kelas spesies dengan probabilitas terbesar
+            decoded_best_three_species = lbl_encoder.inverse_transform(best_three_species)
+
+            # membuat response
+            response = {
+                            "prediction": {
+                                "first_prediction": decoded_best_three_species[2],
+                                "second_prediction": decoded_best_three_species[1],
+                                "third_prediction": decoded_best_three_species[0]
+                            },
+                            "probabilities": {
+                                "first_probability": round(sorted_probs[0]*100, 2),
+                                "second_prediction": round(sorted_probs[1]*100, 2), 
+                                "third_prediction": round(sorted_probs[2]*100, 2)
+                            }
+                        }
+            return response, 200
 
 # setup resource
 api.add_resource(MachineLearningResource, "/api/predict", methods=["POST"])
