@@ -42,7 +42,7 @@ class MachineLearningResource(Resource):
 
         # validasi request
         if not(validator.validate(request_data)):
-            return validator.errors, 401
+            return validator.errors, 400
         else:
             fitur["jumlah_lengan"] = request_data["jumlah_lengan"]
             fitur["bercabang"] = request_data["bercabang"]
