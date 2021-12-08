@@ -75,8 +75,8 @@ class MachineLearningResource(Resource):
                             },
                             "probabilities": {
                                 "first_probability": round(sorted_probs[0]*100, 2),
-                                "second_prediction": round(sorted_probs[1]*100, 2), 
-                                "third_prediction": round(sorted_probs[2]*100, 2)
+                                "second_probability": round(sorted_probs[1]*100, 2), 
+                                "third_probability": round(sorted_probs[2]*100, 2)
                             }
                         }
             return response, 200
