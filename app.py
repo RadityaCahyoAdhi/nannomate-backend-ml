@@ -1,6 +1,7 @@
 # import library
 from flask import Flask, request
 from flask_restful import Resource, Api
+from flask_cors import CORS
 from jcopml.utils import load_model
 from cerberus import Validator
 import numpy as np
@@ -10,6 +11,9 @@ app = Flask(__name__)
 
 # inisiasi object flask_restful
 api = Api(app)
+
+# inisiasi object flask_cors
+CORS(app)
 
 # load label encoder
 lbl_encoder = load_model("model/lbl_encoder_nannomate.pkl")
