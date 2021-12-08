@@ -46,8 +46,8 @@ class MachineLearningResource(Resource):
 
         # validasi request
         if not(validator.validate(request_data)):
-            error = { "error":
-                validator.errors
+            error = { 
+                "error": validator.errors
             }
             return error, 400
         else:
