@@ -35,9 +35,12 @@ class MachineLearningResource(Resource):
         schema = {
                     'jumlah_lengan': {'type': 'integer', 'min': 0},
                     'bercabang': {'type': 'integer', 'min': 0, 'max': 1},
+                    'simetris': {'type': 'integer', 'min': 0, 'max': 1},
                     'knob': {'type': 'integer', 'min': 0, 'max': 1},
+                    'ukuran_lengan': {'type': 'integer', 'min': 0, 'max': 1},
                     'bentuk_lengan': {'type': 'integer', 'min': 0, 'max': 1},
-                    'ujung_lengan': {'type': 'integer', 'min': 0, 'max': 1}
+                    'ujung_lengan': {'type': 'integer', 'min': 0, 'max': 1},
+                    'ujung_lengan_melengkung': {'type': 'integer', 'min': 0, 'max': 1}
                     }
 
         # inisialisasi validator            
@@ -53,12 +56,15 @@ class MachineLearningResource(Resource):
         else:
             fitur["jumlah_lengan"] = request_data["jumlah_lengan"]
             fitur["bercabang"] = request_data["bercabang"]
+            fitur["simetris"] = request_data["simetris"]
             fitur["knob"] = request_data["knob"]
+            fitur["ukuran_lengan"] = request_data["ukuran_lengan"]
             fitur["bentuk_lengan"] = request_data["bentuk_lengan"]
             fitur["ujung_lengan"] = request_data["ujung_lengan"]
+            fitur["ujung_lengan_melengkung"] = request_data["ujung_lengan_melengkung"]
 
             # prediksi probabilitas masing-masing kelas
-            probs = random_forest_model.predict_proba([[fitur["jumlah_lengan"], fitur["bercabang"], fitur["knob"], fitur["bentuk_lengan"], fitur["ujung_lengan"]]])
+            probs = random_forest_model.predict_proba([[fitur["jumlah_lengan"], fitur["bercabang"], fitur["simetris"], fitur["knob"], fitur["ukuran_lengan"], fitur["bentuk_lengan"], fitur["ujung_lengan"], fitur["ujung_lengan_melengkung"]]])
 
             # mengurutkan probabilitas dari yang terbesar ke yang terkecil
             sorted_probs = sorted(probs[0], reverse=True)
