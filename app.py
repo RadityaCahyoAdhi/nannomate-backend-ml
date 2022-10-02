@@ -69,23 +69,27 @@ class MachineLearningResource(Resource):
             # mengurutkan probabilitas dari yang terbesar ke yang terkecil
             sorted_probs = sorted(probs[0], reverse=True)
 
-            # mencari 3 kelas spesies dengan probabilitas terbesar
-            best_three_species = np.argsort(probs)[:,-3:][0]
+            # mencari 5 kelas spesies dengan probabilitas terbesar
+            best_five_species = np.argsort(probs)[:,-5:][0]
             
-            # melakukan inverse transform pada 3 kelas spesies dengan probabilitas terbesar
-            decoded_best_three_species = lbl_encoder.inverse_transform(best_three_species)
+            # melakukan inverse transform pada 5 kelas spesies dengan probabilitas terbesar
+            decoded_best_five_species = lbl_encoder.inverse_transform(best_five_species)
 
             # membuat response
             response = {
                             "prediction": {
-                                "first_prediction": decoded_best_three_species[2],
-                                "second_prediction": decoded_best_three_species[1],
-                                "third_prediction": decoded_best_three_species[0]
+                                "first_prediction": decoded_best_five_species[4],
+                                "second_prediction": decoded_best_five_species[3],
+                                "third_prediction": decoded_best_five_species[2],
+                                "fourth_prediction": decoded_best_five_species[1],
+                                "fifth_prediction": decoded_best_five_species[0],
                             },
                             "probabilities": {
                                 "first_probability": round(sorted_probs[0]*100, 2),
                                 "second_probability": round(sorted_probs[1]*100, 2), 
-                                "third_probability": round(sorted_probs[2]*100, 2)
+                                "third_probability": round(sorted_probs[2]*100, 2),
+                                "fourth_probability": round(sorted_probs[3]*100, 2),
+                                "fifth_probability": round(sorted_probs[4]*100, 2)
                             }
                         }
             return response, 200
